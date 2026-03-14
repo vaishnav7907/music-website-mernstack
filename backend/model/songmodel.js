@@ -1,15 +1,18 @@
 const mongoose= require("mongoose")
 
 const songschema= new mongoose.Schema({
-    song:{type:String,default:""},
+    file:{type:String,default:""},
     songname:{type:String,default:""},
     artistname:{type:String,default:""},
     duration:{type:String,default:""}
 },
 {
-    timestamps:true 
+    
+    timestamps:true
+     
 }
 )
+
 const songmodell=mongoose.model("songmodel",songschema)
 
 

@@ -10,8 +10,13 @@ const storage = multer.diskStorage({
   },
 
   filename: function (req, file, cb) {
-    const uniquefile = `${req.user.userId}-${Date.now()}-${path.extname(file.originalname)}`;
+
+    
+    const uniquefile =   `${req.user.user_id}-${Date.now()}${path.extname(file.originalname)}`;
     cb(null, uniquefile);
+
+   
+    
   },
 });
 
@@ -25,12 +30,12 @@ const filefilt=(req,file,cb)=>{
         path.extname(file.originalname).toLowerCase()
     )
 
-    const mymetype =mediatypes.test(file.mymetype)
+    const mymetype =mediatypes.test(file.mimetype)
 
     if(extenstionnametolower&&mymetype){
       cb(null,true)
     } else{
-      cb(error("this file is not alowed" , false))
+      cb(new error("this file is not alowed") , false)
     }
 
 
@@ -39,8 +44,8 @@ const filefilt=(req,file,cb)=>{
 
 
 const upload=multer({
-    storage:storage,
-    filefilt:filefilt
+    storage: storage,
+    fileFilter: filefilt
 })
 
 module.exports=upload

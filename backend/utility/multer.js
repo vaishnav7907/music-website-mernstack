@@ -1,51 +1,76 @@
 const { error } = require("console");
 const multer = require("multer");
-const path = require("path")
+const path = require("path");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./uploads");
-    
-    
+    if (file.fieldname === "photos") {
+      cb(null, "./uploads/images");
+    } else if (file.fieldname === "songs") {
+      cb(null, "./uploads/songs");
+    } else {
+      cb(error("invalid fieldname"), false);
+    }
   },
 
   filename: function (req, file, cb) {
-
-    
-    const uniquefile =   `${req.user.user_id}-${Date.now()}${path.extname(file.originalname)}`;
+    const uniquefile = `${req.user.user_id}-${Date.now()}${path.extname(file.originalname)}`;
     cb(null, uniquefile);
-
    
-    
   },
 });
 
+const filefilt = (req, file, cb) => {
+  // const mediatypes=/mp3|wav|flac|jpg|png|jpeg/;
 
+  // const extenstionnametolower= mediatypes.test(
+  //     path.extname(file.originalname).toLowerCase()
+  // )
 
-const filefilt=(req,file,cb)=>{
+  // const mymetype =mediatypes.test(file.mimetype)
 
-    const mediatypes=/mp3|wav|flac|jpg/;
+  // if(extenstionnametolower&&mymetype){
+  //   cb(null,true)
+  // } else{
+  //   cb(new error("this file is not alowed") , false)
+  // }
 
-    const extenstionnametolower= mediatypes.test(
-        path.extname(file.originalname).toLowerCase()
-    )
+  if (file && file.fieldname === "photos") {
+    const mediatypee = /jpg|png|jpeg/;
 
-    const mymetype =mediatypes.test(file.mimetype)
+    const extenstionnametolow = mediatypee.test(
+      path.extname(file.originalname).toLowerCase(),
+    );
 
-    if(extenstionnametolower&&mymetype){
-      cb(null,true)
-    } else{
-      cb(new error("this file is not alowed") , false)
+    const mymetyp = mediatypee.test(file.mimetype);
+
+    if (extenstionnametolow && mymetyp) {
+      cb(null, true);
+    } else {
+      cb(new error("this file is not alowed"), false);
     }
+  } else if (file && file.fieldname === "songs") {
+    const mediatypes = /mp3|wav|flac/;
 
+    const extenstionnametolower = mediatypes.test(
+      path.extname(file.originalname).toLowerCase(),
+    );
 
-}
+    const mymetype = mediatypes.test(file.mimetype);
 
+    if (extenstionnametolower && mymetype) {
+      cb(null, true);
+    } else {
+      cb(new error("this file is not alowed"), false);
+    }
+  }else{
+    cb(new error ("invalid frild name"));
+  }
+};
 
+const upload = multer({
+  storage: storage,
+  fileFilter: filefilt,
+});
 
-const upload=multer({
-    storage: storage,
-    fileFilter: filefilt
-})
-
-module.exports=upload
+module.exports = upload;

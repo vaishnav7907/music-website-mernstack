@@ -3,7 +3,7 @@ const { userauthcreate, userlogin } = require("../controller/authcontroller")
 const verifytoken = require("../middleware/middleware")
 const upload = require("../utility/multer")
 const { songcontroll,musicupload, getAllSongs, deleteSongs, getAsong, updatesongs, updateimage}  = require("../controller/songcontroller")
-const { artistcreate, getallartists, artistupload } = require("../controller/aristcontroller")
+const { artistcreate, getallartists, artistupload, updateartist, deleteartist } = require("../controller/aristcontroller")
 // const musicupload = require("../controller/songcontroller")
 
 const router= express.Router()
@@ -45,10 +45,14 @@ router.patch("/updtimg/:id",updateimage)
 
 router.get("/getallartists",getallartists)
 
+//update artist
+
+router.patch("/updtartist/:id",updateartist)
 
 
+//deelete artist
 
-
+router.delete("/dltartist/:id",deleteartist)
 
 
 module.exports=router

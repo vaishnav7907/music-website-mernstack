@@ -3,11 +3,11 @@ const mongoose=require("mongoose")
 const favouriteschema= mongoose.Schema({
 
 
-songname:{type:String,required:true},
-artist:{type:String, required:true},
+songname:{type:mongoose.Schema.Types.ObjectId,ref:"songmodel",required:true},
+ artistname:{type:mongoose.Schema.Types.ObjectId,ref:"artistimg",default:""},
 duration:{type:String, required:true},
 songUrl:{type:String, required:true},
-songimg:{type:String,required:true},
+songimage:{type:mongoose.Schema.Types.ObjectId,ref:"artistimg",default:""},
 totalsongs:{type:String,required:true},
 topgenre:{type:String,required:true},
 totalduration:{type:String,required:true}

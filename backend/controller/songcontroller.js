@@ -12,7 +12,7 @@ const musicupload = async (req, res) => {
       file: req.file.filename,
       songname: req.body.songname,
       artistname: req.body.artistname,
-      image: req.file.image,
+      songimage: req.file.image,
     });
     await newSong.save();
 
@@ -57,7 +57,7 @@ const getAllSongs = async (req, res) => {
 
 const updateimage = async (req, res) => {
   try {
-    const { image } = req.file.image;
+    const { songimage } = req.file.image;
     const imgupdtid = req.params.id;
 
     const updtfunction= await songmodell.findByIdAndUpdate(imgupdtid,{image:image},{new:true})

@@ -1,4 +1,4 @@
-const { error } = require("console");
+
 const multer = require("multer");
 const path = require("path");
 
@@ -8,15 +8,19 @@ const storage = multer.diskStorage({
       cb(null, "./uploads/images");
     } else if (file.fieldname === "songs") {
       cb(null, "./uploads/songs");
+    } else if (file.fieldname == "artists") {
+      cb(null, "./uploads/artists");
     } else {
-      cb(error("invalid fieldname"), false);
+      
+      
+      cb( new Error("invalid fieldname"), false);
     }
   },
 
   filename: function (req, file, cb) {
     const uniquefile = `${req.user.user_id}-${Date.now()}${path.extname(file.originalname)}`;
+    //  const uniquefile = `{Date.now()}${path.extname(file.originalname)}`;
     cb(null, uniquefile);
-   
   },
 });
 
@@ -47,8 +51,27 @@ const filefilt = (req, file, cb) => {
     if (extenstionnametolow && mymetyp) {
       cb(null, true);
     } else {
-      cb(new error("this file is not alowed"), false);
+      cb(new Error("this file is not alowed"), false);
     }
+
+
+  } else if (file && file.fieldname == "artists") {
+    const mediatypeeee = /jpg|png|jpeg/;
+
+    const extenstionnametolowwer = mediatypeeee.test(
+      path.extname(file.originalname).toLowerCase(),
+    );
+
+    const mymetypee = mediatypeeee.test(file.mimetype);
+
+    if (extenstionnametolowwer && mymetypee) {
+      cb(null, true);
+    } else {
+      cb(new Error("this file is not alowed"), false);
+    }
+
+
+
   } else if (file && file.fieldname === "songs") {
     const mediatypes = /mp3|wav|flac/;
 
@@ -61,10 +84,10 @@ const filefilt = (req, file, cb) => {
     if (extenstionnametolower && mymetype) {
       cb(null, true);
     } else {
-      cb(new error("this file is not alowed"), false);
+      cb(new Error("this file is not alowed"), false);
     }
-  }else{
-    cb(new error ("invalid frild name"));
+  } else {
+    cb(new error("invalid frild name"));
   }
 };
 

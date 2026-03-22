@@ -3,9 +3,9 @@ const mongoose= require("mongoose")
 const songschema= new mongoose.Schema({
     file:{type:String,default:""},
     songname:{type:String,default:""},
-    artistname:{type:String,default:""},
+    artistname:{type:mongoose.Schema.Types.ObjectId,ref:"artistimg",default:""},
     duration:{type:String,default:""},
-    image:{type:String,default:"" }
+    songimage:{type:String,default:"" }
 
 },
 

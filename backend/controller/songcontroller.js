@@ -1,5 +1,6 @@
 const songmodell = require("../model/songmodel");
 const { findOne } = require("../model/userlogin");
+const musicmetadata= require("music-metadata")
 
 const musicupload = async (req, res) => {
   // if(!req){
@@ -8,11 +9,21 @@ const musicupload = async (req, res) => {
   // res.status(200).json({message:"succes",musicfilesuccess:req.file.path})
   // console.log(req.file.path);
   try {
+
+const songpath=req.files.songs[0].path
+    const metadata = await musicmetadata.parseFile(songpath)
+    const duration = Math.floor(metadata.format.duration)   //inseconds
+    
+     if (!req.files || !req.files.songs || !req.files.photos) {
+      return res.status(400).json({ message: "Files are missing" });
+    }
+
     const newSong = new songmodell({
-      file: req.file.filename,
+      file: req.files.songs[0].path,
       songname: req.body.songname,
-      artistname: req.body.artistname,
-      songimage: req.file.image,
+      artist: req.body.artist,
+      duration:duration,
+      songimage: req.files.photos[0].path,
     });
     await newSong.save();
 
@@ -23,16 +34,16 @@ const musicupload = async (req, res) => {
 };
 
 const songcontroll = async (req, res) => {
-  const { file, songname, artistname, duration } = req.body;
+  const { file, songname, artist, duration } = req.body;
 
-  const existingsong = await songmodell.findOne({ song });
+  const existingsong = await songmodell.findOne({ songname });
   if (existingsong) {
     return res.status(409).json({ message: "already exist" });
   } else {
     const songdetails = await songmodell.create({
       file,
       songname,
-      artistname,
+      artist,
       duration,
     });
 
@@ -57,10 +68,13 @@ const getAllSongs = async (req, res) => {
 
 const updateimage = async (req, res) => {
   try {
-    const { songimage } = req.file.image;
+    const  {songimage}  = req.file.image;
+    
     const imgupdtid = req.params.id;
 
-    const updtfunction= await songmodell.findByIdAndUpdate(imgupdtid,{image:image},{new:true})
+    
+  
+    const updtfunction= await songmodell.findByIdAndUpdate(imgupdtid,{songimage,},{new:true})
     res.json({
       message:"successfully image addded",
       songfn:updtfunction
@@ -102,12 +116,13 @@ const getAsong = async (req, res) => {
 
 const updatesongs = async (req, res) => {
   try {
-    const { songname } = req.body;
+    const { songname ,artist} = req.body;
+   
     const updatesongid = req.params.id;
 
     const updatesongbyid = await songmodell.findByIdAndUpdate(
       updatesongid,
-      { songname: songname },
+      {  songname ,artist},
       { new: true },
     );
 

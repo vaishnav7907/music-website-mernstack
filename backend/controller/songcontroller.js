@@ -1,6 +1,6 @@
 const songmodell = require("../model/songmodel");
 const { findOne } = require("../model/userlogin");
-const musicmetadata= require("music-metadata")
+const musicmetadata = require("music-metadata");
 
 const musicupload = async (req, res) => {
   // if(!req){
@@ -9,12 +9,11 @@ const musicupload = async (req, res) => {
   // res.status(200).json({message:"succes",musicfilesuccess:req.file.path})
   // console.log(req.file.path);
   try {
+    const songpath = req.files.songs[0].path;
+    const metadata = await musicmetadata.parseFile(songpath);
+    const duration = Math.floor(metadata.format.duration); //inseconds
 
-const songpath=req.files.songs[0].path
-    const metadata = await musicmetadata.parseFile(songpath)
-    const duration = Math.floor(metadata.format.duration)   //inseconds
-    
-     if (!req.files || !req.files.songs || !req.files.photos) {
+    if (!req.files || !req.files.songs || !req.files.photos) {
       return res.status(400).json({ message: "Files are missing" });
     }
 
@@ -22,8 +21,9 @@ const songpath=req.files.songs[0].path
       file: req.files.songs[0].path,
       songname: req.body.songname,
       artist: req.body.artist,
-      duration:duration,
+      duration: duration,
       songimage: req.files.photos[0].path,
+      weather: req.body.weather,
     });
     await newSong.save();
 
@@ -34,7 +34,7 @@ const songpath=req.files.songs[0].path
 };
 
 const songcontroll = async (req, res) => {
-  const { file, songname, artist, duration } = req.body;
+  const { file, songname, artist, duration, weather } = req.body;
 
   const existingsong = await songmodell.findOne({ songname });
   if (existingsong) {
@@ -45,6 +45,7 @@ const songcontroll = async (req, res) => {
       songname,
       artist,
       duration,
+      weather,
     });
 
     console.log(songdetails);
@@ -68,25 +69,23 @@ const getAllSongs = async (req, res) => {
 
 const updateimage = async (req, res) => {
   try {
-    const  {songimage}  = req.file.image;
-    
+    const { songimage } = req.file.image;
+
     const imgupdtid = req.params.id;
 
-    
-  
-    const updtfunction= await songmodell.findByIdAndUpdate(imgupdtid,{songimage,},{new:true})
+    const updtfunction = await songmodell.findByIdAndUpdate(
+      imgupdtid,
+      { songimage },
+      { new: true },
+    );
     res.json({
-      message:"successfully image addded",
-      songfn:updtfunction
-    },
-      
-    )
+      message: "successfully image addded",
+      songfn: updtfunction,
+    });
   } catch (error) {
+    console.log("kutta update imagelanu error", error);
 
-    console.log("kutta update imagelanu error",error);
-
-    res.status(500).json("failed to update image")
-    
+    res.status(500).json("failed to update image");
   }
 };
 
@@ -116,13 +115,13 @@ const getAsong = async (req, res) => {
 
 const updatesongs = async (req, res) => {
   try {
-    const { songname ,artist} = req.body;
-   
+    const { songname, artist, weather } = req.body;
+
     const updatesongid = req.params.id;
 
     const updatesongbyid = await songmodell.findByIdAndUpdate(
       updatesongid,
-      {  songname ,artist},
+      { songname, artist, weather },
       { new: true },
     );
 
@@ -143,5 +142,5 @@ module.exports = {
   deleteSongs,
   getAsong,
   updatesongs,
-  updateimage
+  updateimage,
 };

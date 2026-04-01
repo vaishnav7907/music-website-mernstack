@@ -1,24 +1,49 @@
-const mongoose= require("mongoose")
+const mongoose = require("mongoose");
 
-const playlistschema= mongoose.Schema({
+const playlistschema = mongoose.Schema(
+  {
+    songs: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "songmodel",
+      required: true,
+    }],
+    // songname: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "songmodel",
+    //   required: true,
+    // },
+    // artist: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "songmodel",
+    //   default: "",
+    // },
+    playlistname:{
+     type:String,
+     default:""
+    },
+    totalsongs:{
+     type:String,
+     default:""
+    },
 
+    // duration: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "songmodel",
+    //   default: "",
+    // },
+    // //     songUrl: { type: String, required: true },
+    // songimage: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "songmodel",
+    //   default: "",
+    // },
+    
+  },
+  {
+    timestamps: true,
+  },
+);
 
-songname:{type:mongoose.Schema.Types.ObjectId,ref:"songmodel",required:true},
- artistname:{type:mongoose.Schema.Types.ObjectId,ref:"artistimg",default:""},
-duration:{type:String, required:true},
-songUrl:{type:String, required:true},
-songimage:{type:mongoose.Schema.Types.ObjectId,ref:"artistimg",default:""},
-playlistname:{type:String},
-totalsongs:{type:String}
+const playlistmodel = mongoose.model("playlistsmodel", playlistschema);
 
-},
-{
-     timestamps:true
-}
-
-)
-
-
-const playlistmodel = mongoose.model("playlistsmodel",playlistschema)
-
-module.exports=playlistmodel
+module.exports = playlistmodel;

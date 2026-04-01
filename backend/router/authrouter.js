@@ -4,6 +4,7 @@ const verifytoken = require("../middleware/middleware")
 const upload = require("../utility/multer")
 const { songcontroll,musicupload, getAllSongs, deleteSongs, getAsong, updatesongs, updateimage}  = require("../controller/songcontroller")
 const { artistcreate, getallartists, artistupload, updateartist, deleteartist } = require("../controller/aristcontroller")
+const getplaylist = require("../controller/playlistcontroller")
 // const musicupload = require("../controller/songcontroller")
 
 const router= express.Router()
@@ -54,5 +55,13 @@ router.patch("/updtartist/:id",updateartist)
 
 router.delete("/dltartist/:id",deleteartist)
 
+
+//playlist
+
+
+//createplaylist
+router.post("/createplaylist",getplaylist.createplaylist)
+
+router.post("/:id/addsongplaylist",getplaylist.songtoplaylist)
 
 module.exports=router

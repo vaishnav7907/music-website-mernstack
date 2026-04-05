@@ -2,16 +2,14 @@ const playlistmodel = require("../model/playlist");
 
 const createplaylist = async (req, res) => {
   try {
-    const {  songs, playlistname } = req.body;
+    const { songs, playlistname } = req.body;
 
-   
-    
     const playlistt = new playlistmodel({
       // totalsongs,
       songs,
       playlistname,
     });
- console.log(playlistt);
+    console.log(playlistt);
     await playlistt.save();
 
     res
@@ -22,8 +20,6 @@ const createplaylist = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
 
 const getplaylists = async (req, res) => {
   try {
@@ -36,9 +32,6 @@ const getplaylists = async (req, res) => {
     res.status(500).json({ error: "Error fetching playlist" });
   }
 };
-
-
-
 
 // ADD SONG TO PLAYLIST
 const songtoplaylist = async (req, res) => {
@@ -67,4 +60,16 @@ const songtoplaylist = async (req, res) => {
   }
 };
 
-module.exports = { createplaylist, songtoplaylist ,getplaylists};
+
+const getallplaylists=async(req,res)=>{
+
+  try {
+   const allplaylistfn= await playlistmodel.find()
+   res.json(allplaylistfn)
+  } catch (error) {
+    console.log("allplaylisterror",error);
+     res.status(500).json({ message: "something went wrong in fetch all songs" }, error);
+  }
+}
+
+module.exports = { createplaylist, songtoplaylist, getplaylists,getallplaylists, };

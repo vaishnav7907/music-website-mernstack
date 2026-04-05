@@ -62,9 +62,10 @@ router.delete("/dltartist/:id",deleteartist)
 //createplaylist
 router.post("/createplaylist",getplaylist.createplaylist)
 
-router.post("addsongplaylist",getplaylist.songtoplaylist)
+router.post("/addsongplaylist",getplaylist.songtoplaylist)
 
 
 router.get("/getplaylists/:id",getplaylist.getplaylists)
+router.get("/getallplaylists",getplaylist.getallplaylists)
 
 module.exports=router

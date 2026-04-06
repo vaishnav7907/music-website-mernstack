@@ -15,10 +15,13 @@ router.route("/signup").post(userauthcreate)
 router.route("/login").post(userlogin)
 // router.post("/musicfiles",verifytoken,upload.single("uploadmusic"),musicupload)
 // router.post("/musicfiles",verifytoken,upload.array("uploadmusic",10),musicupload)
+
+
+//===================================================
 router.post("/musicfiles",verifytoken,upload.fields([{name:"photos",maxCount:5},{name:"songs",maxCount:3}]),musicupload)
 router.post("/songinfo",songcontroll)
 
-//get all songs
+//get all songs===============================================================
 router.get("/getallsongs",getAllSongs)
 
 //delete songs 
@@ -36,7 +39,7 @@ router.patch("/updatesongs/:id",updatesongs)
 router.patch("/updtimg/:id",updateimage)
 
 
-// create artists
+// create artists====================
  //router.post("/createartist",artistcreate)
 
  router.post(
@@ -56,16 +59,25 @@ router.patch("/updtartist/:id",updateartist)
 router.delete("/dltartist/:id",deleteartist)
 
 
-//playlist
+//playlist=====================
 
 
 //createplaylist
 router.post("/createplaylist",getplaylist.createplaylist)
-
+//add songs to playlist
 router.post("/addsongplaylist",getplaylist.songtoplaylist)
 
-
+//get all playlist
 router.get("/getplaylists/:id",getplaylist.getplaylists)
+//get playlist by id
 router.get("/getallplaylists",getplaylist.getallplaylists)
+
+//deleteplaylist
+router.delete("/deleteplaylist/:id",getplaylist.deleteplaylist)
+
+//update playlist
+
+router.patch("/updtplaylist/:id",getplaylist.updateplaylist)
+
 
 module.exports=router

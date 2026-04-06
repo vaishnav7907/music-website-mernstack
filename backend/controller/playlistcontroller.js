@@ -60,16 +60,50 @@ const songtoplaylist = async (req, res) => {
   }
 };
 
+const getallplaylists = async (req, res) => {
+  try {
+    const allplaylistfn = await playlistmodel.find();
+    res.json(allplaylistfn);
+  } catch (error) {
+    console.log("allplaylisterror", error);
+    res
+      .status(500)
+      .json({ message: "something went wrong in fetch all songs" }, error);
+  }
+};
 
-const getallplaylists=async(req,res)=>{
+const deleteplaylist = async (req, res) => {
+  try {
+    const playlistid = req.params.id;
+    const deleteplaylistfn = await playlistmodel.findByIdAndDelete(playlistid);
+    res.json("successfully deleted");
+  } catch (error) {
+    console.log("deleteplaylistERROR", error);
+    res.status(500).json("cant delete this file", error);
+  }
+};
+
+const updateplaylist = async (req, res) => {
+  // const{playlistname}=req.body
 
   try {
-   const allplaylistfn= await playlistmodel.find()
-   res.json(allplaylistfn)
-  } catch (error) {
-    console.log("allplaylisterror",error);
-     res.status(500).json({ message: "something went wrong in fetch all songs" }, error);
-  }
-}
+    const playlistid = req.params.id;
+const{playlistname}=req.body
+    const updateplaylistfn = await playlistmodel.findByIdAndUpdate(playlistid, { playlistname},{new:true});
 
-module.exports = { createplaylist, songtoplaylist, getplaylists,getallplaylists, };
+    res.json({ message: "playlistupdated", data: updateplaylistfn });
+  } catch (error) {
+    console.log("kutta update playlist error", error);
+
+    res.status(500).json("failed to update playlist");
+  }
+};
+
+module.exports = {
+  createplaylist,
+  songtoplaylist,
+  getplaylists,
+  getallplaylists,
+  deleteplaylist,
+  updateplaylist
+};

@@ -73,11 +73,7 @@ const updateimage = async (req, res) => {
 
     const imgupdtid = req.params.id;
 
-    const updtfunction = await songmodell.findByIdAndUpdate(
-      imgupdtid,
-      { songimage },
-      { new: true },
-    );
+    const updtfunction = await songmodell.findByIdAndUpdate(imgupdtid,{ songimage },{ new: true },);
     res.json({
       message: "successfully image addded",
       songfn: updtfunction,

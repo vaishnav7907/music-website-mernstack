@@ -38,21 +38,21 @@ const songtoplaylist = async (req, res) => {
   try {
     const { playlistId, songId } = req.body;
 
-    // find playlist
-    const playlist = await playlistmodel.findById(playlistId);
+    const updatedPlaylist = await playlistmodel.findByIdAndUpdate(
+      playlistId,
+      {
+        $addToSet: { songs: songId } // 🔥 no duplicates
+      },
+      { new: true }
+    );
 
-    if (!playlist) {
+    if (!updatedPlaylist) {
       return res.status(404).json({ message: "Playlist not found" });
     }
 
-    // push song into songs array
-    playlist.songs.push(songId);
-
-    await playlist.save();
-
     res.status(200).json({
       message: "Song added successfully",
-      data: playlist,
+      data: updatedPlaylist,
     });
   } catch (error) {
     console.log(error);
@@ -88,8 +88,12 @@ const updateplaylist = async (req, res) => {
 
   try {
     const playlistid = req.params.id;
-const{playlistname}=req.body
-    const updateplaylistfn = await playlistmodel.findByIdAndUpdate(playlistid, { playlistname},{new:true});
+    const { playlistname } = req.body;
+    const updateplaylistfn = await playlistmodel.findByIdAndUpdate(
+      playlistid,
+      { playlistname },
+      { new: true },
+    );
 
     res.json({ message: "playlistupdated", data: updateplaylistfn });
   } catch (error) {
@@ -105,5 +109,5 @@ module.exports = {
   getplaylists,
   getallplaylists,
   deleteplaylist,
-  updateplaylist
+  updateplaylist,
 };

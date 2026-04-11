@@ -3,7 +3,7 @@ const mongoose=require("mongoose")
 const favouriteschema= mongoose.Schema({
 
 
-songs:{type:mongoose.Schema.Types.ObjectId,ref:"songmodel",required:true},
+songs:[{type:mongoose.Schema.Types.ObjectId,ref:"songmodel",required:true}],
 
 
 },

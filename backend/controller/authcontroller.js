@@ -8,7 +8,7 @@ const { model } = require("mongoose")
 
 const userauthcreate = async (req, res) => {
 
-    const { Email, Password } = req.body
+    const {Fullname, Email, Password } = req.body
 
     const existingemail = await modelll.findOne({ Email })
     if (existingemail) {
@@ -19,7 +19,7 @@ const userauthcreate = async (req, res) => {
         const bcrypt = await bcryptt.hash(Password, 10)
 
         const userdetails = await modelll.create({
-            Email, Password: bcrypt
+          Fullname,  Email, Password: bcrypt
         })
 
         console.log(userdetails);
@@ -36,39 +36,71 @@ const userauthcreate = async (req, res) => {
 // login
 
 
-const userlogin = async (req, res) => {
+// const userlogin = async (req, res) => {
 
 
-    const { Email, Password } = req.body
+//     const { Email, Password } = req.body
 
-    const isemailexist = await modelll.findOne({ Email })
+//     const isemailexist = await modelll.findOne({ Email })
 
-    if (!isemailexist) {
-        res.json("invalid email")
-    }
+//     if (!isemailexist) {
+//           return res.status(400).json({ message: "invalid email" });
+//     }
 
 
-    const ispassexist = await bcryptt.compare(Password, isemailexist.Password)
-    if (!ispassexist) {
-        res.json("invalid password")
-    }
+//     const ispassexist = await bcryptt.compare(Password, isemailexist.Password)
+//     if (!ispassexist) {
+//         return res.status(400).json({ message: "invalid password" });
+//     }
 
-    else {
+//     else {
 
-        const token = jwtoken.sign(
+//         const token = jwtoken.sign(
 
-            { user_id: isemailexist._id },
-            process.env.jwt_token,
-            { expiresIn: "1hr" }
+//             { user_id: isemailexist._id },
+//             process.env.jwt_token,
+//             { expiresIn: "1h" }
 
-        )
+//         )
 
-        res.json({token})
+//         res.json({token})
 
         
-    }
-}
+//     }
+// }
 
+const userlogin = async (req, res) => {
+  try {
+    const { Email, Password } = req.body;
+
+    const isemailexist = await modelll.findOne({ Email });
+
+    if (!isemailexist) {
+      return res.status(400).json({ message: "invalid email" });
+    }
+
+    const ispassexist = await bcryptt.compare(
+      Password,
+      isemailexist.Password
+    );
+
+    if (!ispassexist) {
+      return res.status(400).json({ message: "invalid password" });
+    }
+
+    const token = jwtoken.sign(
+      { user_id: isemailexist._id },
+      process.env.jwt_token,
+      { expiresIn: "1h" }
+    );
+
+    res.json({ token });
+
+  } catch (error) {
+  console.log("LOGIN ERROR:", error.message);
+  res.status(500).json({ message: error.message });
+}
+};
 
 
 

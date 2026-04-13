@@ -1,42 +1,39 @@
 const favouritemodel = require("../model/favourites");
+const { create } = require("../model/userlogin");
 
-const createfavourites = async (req, res) => {
-  try {
-    const { songs } = req.body;
-    const favourites = new favouritemodel({ songs });
-    console.log(favourites);
 
-    await favourites.save();
-
-    res.json({ message: "favourites created successfully", data: favourites });
-  } catch (error) {
-    console.log("favourites error", error);
-    res.status(500).json(error);
-  }
-};
 
 const addtoFavourites = async (req, res) => {
   try {
-    const { favouritesId, songId } = req.body;
-    const addfavfn = await favouritemodel.findByIdAndDelete(
-      favouritesId,
-      { $addToSet: { songs: songId } },
-      { new: true },
-    );
-    if (!addfavfn) {
-      res.json({ message: "favourites not found", data: addfavfn });
+   const { songId } = req.body;
+    const userId = req.user.id;
+    const existing =await favouritemodel.findOne({songId,userId})
+    if(existing){
+      res.json("song added")
+    }else{
+      const addsongtofav=await favouritemodel.create({songId,userId})
+      return res.json({ message: "Added to favourites" ,data});
     }
-    res.json({ message: " song  added to favourites", data: addfavfn });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: "Server error",data:addsongtofav });
   }
 };
 
+const getallfav=async(req,res)=>{
+try {
+  const userId=req.user.id
+ const getfav= await favouritemodel.find({userId}).populate("songId")
+   res.json(songs);
+} catch (error) {
+  res.status(500).json({ error: err.message });
+}
+}
+
 const favouritesremove = async (req, res) => {
   try {
-    const songid = req.params.id;
-    const favremovefn = await favouritemodel.findByIdAndDelete(songid);
+    const songId = req.params.id;
+    const favremovefn = await favouritemodel.findByIdAndDelete(songId);
     res.json("fav song removed")
   } catch (error) {
      console.log("deletefavourites ERROR", error);
@@ -44,4 +41,4 @@ const favouritesremove = async (req, res) => {
   }
 };
 
-module.exports = { createfavourites, addtoFavourites,favouritesremove };
+module.exports = {  addtoFavourites,favouritesremove,getallfav };

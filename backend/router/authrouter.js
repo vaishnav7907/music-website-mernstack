@@ -87,13 +87,13 @@ router.patch("/updtplaylist/:id",getplaylist.updateplaylist)
 
 
 //favourite add
-router.post("/addtofav",addtoFavourites)
+router.post("/addtofav",verifytoken,addtoFavourites)
 
 //getall fav
-router.get("/getallfav",getallfav)
+router.get("/getallfav",verifytoken,getallfav)
 
 //remove songs from fav
-router.delete("/removefavsongs",favouritesremove)
+router.delete("/removefavsongs/:songId",verifytoken,favouritesremove)
 
 
-module.exports=router
+module.exports=router   

@@ -5,7 +5,7 @@ const upload = require("../utility/multer")
 const { songcontroll,musicupload, getAllSongs, deleteSongs, getAsong, updatesongs, updateimage}  = require("../controller/songcontroller")
 const { artistcreate, getallartists, artistupload, updateartist, deleteartist } = require("../controller/aristcontroller")
 const getplaylist = require("../controller/playlistcontroller")
-const { createfavourites, addtoFavourites, favouritesremove, getallfav } = require("../controller/favouritescontroller")
+const { createfavourites, addtoFavourites, favouritesremove, getallfav, deleteById } = require("../controller/favouritescontroller")
 // const musicupload = require("../controller/songcontroller")
 
 const router= express.Router()
@@ -94,6 +94,9 @@ router.get("/getallfav",verifytoken,getallfav)
 
 //remove songs from fav
 router.delete("/removefavsongs/:songId",verifytoken,favouritesremove)
+
+//delete document empty mongodb document
+router.delete("/deletefavid/:id", deleteById);
 
 
 module.exports=router   

@@ -38,7 +38,7 @@ const addtoFavourites = async (req, res) => {
 
 const getallfav=async(req,res)=>{
 try {
-  const userId=req.user.user_id
+  const userId=req.user.id
  const getfav= await favouritemodel.find({userId}).populate("songId")
    res.json(getfav);
 } catch (error) {
@@ -48,8 +48,9 @@ try {
 
 const favouritesremove = async (req, res) => {
   try {
-    const songId = req.params.id;
-    const favremovefn = await favouritemodel.findByIdAndDelete(songId);
+    const {songId} = req.params;
+    const userId=req.user.id
+    const favremovefn = await favouritemodel.findOneAndDelete({songId,userId});
     res.json("fav song removed")
   } catch (error) {
      console.log("deletefavourites ERROR", error);
@@ -57,4 +58,22 @@ const favouritesremove = async (req, res) => {
   }
 };
 
-module.exports = {  addtoFavourites,favouritesremove,getallfav };
+
+
+// delete by document id
+const deleteById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await favouritemodel.findByIdAndDelete(id);
+
+    res.json({ message: "Document deleted successfully" });
+  } catch (error) {
+    console.log("DELETE ERROR:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
+module.exports = {  addtoFavourites,favouritesremove,getallfav ,deleteById};

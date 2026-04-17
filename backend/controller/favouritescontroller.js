@@ -38,9 +38,9 @@ const addtoFavourites = async (req, res) => {
 
 const getallfav=async(req,res)=>{
 try {
-  const userId=req.user.id
+  const userId=req.user.user_id
  const getfav= await favouritemodel.find({userId}).populate("songId")
-   res.json(songs);
+   res.json(getfav);
 } catch (error) {
   res.status(500).json({ error: err.message });
 }

@@ -6,6 +6,7 @@ const { songcontroll,musicupload, getAllSongs, deleteSongs, getAsong, updatesong
 const { artistcreate, getallartists, artistupload, updateartist, deleteartist } = require("../controller/aristcontroller")
 const getplaylist = require("../controller/playlistcontroller")
 const { createfavourites, addtoFavourites, favouritesremove, getallfav, deleteById } = require("../controller/favouritescontroller")
+const searchsong = require("../controller/searchsong")
 // const musicupload = require("../controller/songcontroller")
 
 const router= express.Router()
@@ -97,6 +98,11 @@ router.delete("/removefavsongs/:songId",verifytoken,favouritesremove)
 
 //delete document empty mongodb document
 router.delete("/deletefavid/:id", deleteById);
+
+
+
+//searchsongs
+router.get("/searchsongs",searchsong)
 
 
 module.exports=router   

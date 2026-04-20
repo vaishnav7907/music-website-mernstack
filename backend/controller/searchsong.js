@@ -5,17 +5,18 @@ const  searchsong= async (req,res)=>{
 
 
 try {
-    const query= req.query?.trim();
+    const query= req.query.query?.trim();
     if(!query){
-        res.json("Search query required")
+         return res.status(400).json({ message: "Search query required" });
     }
 
     const songs= await songmodell.find({
-        title:{$regex:query,$options:"1"}
+        songname:{$regex:query,$options:"i"}
     })
     res.json(songs)
 } catch (error) {
-    res.status(500).json( "Server error" ,error);
+   console.log("ERROR:", error); // 👈 VERY IMPORTANT
+  res.status(500).json({ message: "Server error" });
 }
 
 }

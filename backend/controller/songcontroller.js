@@ -73,7 +73,11 @@ const updateimage = async (req, res) => {
 
     const imgupdtid = req.params.id;
 
-    const updtfunction = await songmodell.findByIdAndUpdate(imgupdtid,{ songimage },{ new: true },);
+    const updtfunction = await songmodell.findByIdAndUpdate(
+      imgupdtid,
+      { songimage },
+      { new: true },
+    );
     res.json({
       message: "successfully image addded",
       songfn: updtfunction,
@@ -131,10 +135,26 @@ const updatesongs = async (req, res) => {
   }
 };
 
+const getweathersongs = async (req, res) => {
+  try {
+    const weather = req.query.weather;
+    const songs = await songmodell.find({
+      weather: { $regex: weather, $options: "i" },
+    });
+    res.json(songs);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "error fetching weather songs",
+    });
+  }
+};
+
 module.exports = {
   musicupload,
   songcontroll,
   getAllSongs,
+  getweathersongs,
   deleteSongs,
   getAsong,
   updatesongs,

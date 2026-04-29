@@ -139,7 +139,9 @@ const getweathersongs = async (req, res) => {
   try {
     const weather = req.query.weather;
     const songs = await songmodell.find({
-      weather: { $regex: weather, $options: "i" },
+      // weather: { $regex: weather, $options: "i" },
+      weather:weather
+
     });
     res.json(songs);
   } catch (error) {

@@ -2,7 +2,7 @@ const express = require("express")
 const { userauthcreate, userlogin } = require("../controller/authcontroller")
 const verifytoken = require("../middleware/middleware")
 const upload = require("../utility/multer")
-const { songcontroll,musicupload, getAllSongs, deleteSongs, getAsong, updatesongs, updateimage, getweathersongs}  = require("../controller/songcontroller")
+const { songcontroll,musicupload, getAllSongs, deleteSongs, getAsong, updatesongs, updateimage, getweathersongs, oldsongs, getSongsBetween, getNewSongs}  = require("../controller/songcontroller")
 const { artistcreate, getallartists, artistupload, updateartist, deleteartist } = require("../controller/aristcontroller")
 const getplaylist = require("../controller/playlistcontroller")
 const { createfavourites, addtoFavourites, favouritesremove, getallfav, deleteById } = require("../controller/favouritescontroller")
@@ -45,6 +45,11 @@ router.get("/weathersongs",getweathersongs)
 
 //update img 
 router.patch("/updtimg/:id",updateimage)
+
+
+router.get("/getoldsongs",oldsongs)
+router.get("/gettopsongs",getSongsBetween)
+router.get("/getnewsongs",getNewSongs)
 
 
 // create artists====================

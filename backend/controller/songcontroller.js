@@ -24,6 +24,7 @@ const musicupload = async (req, res) => {
       duration: duration,
       songimage: req.files.photos[0].path,
       weather: req.body.weather,
+      year:req.body.year,
     });
     await newSong.save();
 
@@ -46,6 +47,7 @@ const songcontroll = async (req, res) => {
       artist,
       duration,
       weather,
+      year,
     });
 
     console.log(songdetails);
@@ -115,13 +117,13 @@ const getAsong = async (req, res) => {
 
 const updatesongs = async (req, res) => {
   try {
-    const { songname, artist, weather } = req.body;
+    const { songname, artist, weather,year } = req.body;
 
     const updatesongid = req.params.id;
 
     const updatesongbyid = await songmodell.findByIdAndUpdate(
       updatesongid,
-      { songname, artist, weather },
+      { songname, artist, weather , year},
       { new: true },
     );
 
@@ -152,6 +154,46 @@ const getweathersongs = async (req, res) => {
   }
 };
 
+
+const oldsongs=async(req,res)=>{
+try {
+  const songs= await songmodell.find({
+    year:{$lt:2000}
+  })
+  res.json(songs)
+} catch (error) {
+     res.status(500).json("error");
+}
+}
+
+const getSongsBetween = async (req, res) => {
+  try {
+    const songs = await songmodell.find({
+      year: { $gte: 1990, $lte: 2010 } // 👈 between
+    });
+
+    res.json(songs);
+  } catch (error) {
+    res.status(500).json("error");
+  }
+};
+
+
+const getNewSongs = async (req, res) => {
+  try {
+    const songs = await songmodell.find({
+      year: { $gt: 2020 } // 👈 new songs
+    });
+
+    res.json(songs);
+  } catch (error) {
+    res.status(500).json("error");
+  }
+};
+
+
+
+
 module.exports = {
   musicupload,
   songcontroll,
@@ -161,4 +203,7 @@ module.exports = {
   getAsong,
   updatesongs,
   updateimage,
+  oldsongs,
+  getSongsBetween,
+  getNewSongs
 };

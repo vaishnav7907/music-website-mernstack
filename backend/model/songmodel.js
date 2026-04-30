@@ -7,7 +7,8 @@ const songschema= new mongoose.Schema({
     artist:{type:String,default:""},
     duration:{type:Number,default:0},
     songimage:{type:String,default:"" },
-    weather:{type:String,enum: ["Sunny", "Rainy", "Cold"],default:"Sunny" } 
+    weather:{type:String,enum: ["Sunny", "Rainy", "Cold"],default:"Sunny" } ,
+    year:{type:Number,default:""}
 
 },
 

@@ -11,7 +11,7 @@ connection()
 
 app.use(cors())
 app.use(express.json())
-app.use("/authentication",router)
+app.use("/Beatflow",router)
 app.use("/uploads", express.static("uploads"));
 
 

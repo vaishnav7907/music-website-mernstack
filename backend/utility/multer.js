@@ -73,7 +73,7 @@ const filefilt = (req, file, cb) => {
 
 
   } else if (file && file.fieldname === "songs") {
-    const mediatypes = /mp3|wav|flac|mpeg/;
+    const mediatypes = /mp3|wav|flac/;
 
     const extenstionnametolower = mediatypes.test(
       path.extname(file.originalname).toLowerCase(),

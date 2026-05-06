@@ -18,6 +18,8 @@ app.use("/uploads", express.static("uploads"));
 
 
 // app.listen(process.env.port,console.log("working"))
-app.listen(process.env.port, () => {
-  console.log("Server running");
+const PORT = process.env.PORT || 5999;
+
+app.listen(PORT, () => {
+  console.log(`Server running on ${PORT}`);
 });

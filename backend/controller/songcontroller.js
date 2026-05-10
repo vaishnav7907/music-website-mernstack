@@ -20,6 +20,7 @@ const musicupload = async (req, res) => {
     const newSong = new songmodell({
       file: req.files.songs[0].path,
       songname: req.body.songname,
+      moviename:req.body.moviename,
       artist: req.body.artist,
       duration: duration,
       songimage: req.files.photos[0].path,
@@ -35,7 +36,7 @@ const musicupload = async (req, res) => {
 };
 
 const songcontroll = async (req, res) => {
-  const { file, songname, artist, duration, weather } = req.body;
+  const { file, songname,moviename, artist, duration, weather } = req.body;
 
   const existingsong = await songmodell.findOne({ songname });
   if (existingsong) {
@@ -44,6 +45,7 @@ const songcontroll = async (req, res) => {
     const songdetails = await songmodell.create({
       file,
       songname,
+      moviename,
       artist,
       duration,
       weather,
@@ -117,13 +119,13 @@ const getAsong = async (req, res) => {
 
 const updatesongs = async (req, res) => {
   try {
-    const { songname, artist, weather,year } = req.body;
+    const { songname, moviename, artist, weather,year } = req.body;
 
     const updatesongid = req.params.id;
 
     const updatesongbyid = await songmodell.findByIdAndUpdate(
       updatesongid,
-      { songname, artist, weather , year},
+      { songname,moviename, artist, weather , year},
       { new: true },
     );
 

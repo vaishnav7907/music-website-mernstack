@@ -88,6 +88,10 @@ router.get("/getallplaylists",getplaylist.getallplaylists)
 //deleteplaylist
 router.delete("/deleteplaylist/:id",getplaylist.deleteplaylist)
 
+//delete playlist song 
+
+router.delete("/dltplaylistsong/:playlistid/:songid",getplaylist.dltplaylistsong)
+
 //update playlist
 
 router.patch("/updtplaylist/:id",getplaylist.updateplaylist)

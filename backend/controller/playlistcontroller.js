@@ -41,9 +41,9 @@ const songtoplaylist = async (req, res) => {
     const updatedPlaylist = await playlistmodel.findByIdAndUpdate(
       playlistId,
       {
-        $addToSet: { songs: songId } // 🔥 no duplicates
+        $addToSet: { songs: songId }, // 🔥 no duplicates
       },
-      { new: true }
+      { new: true },
     );
 
     if (!updatedPlaylist) {
@@ -83,6 +83,18 @@ const deleteplaylist = async (req, res) => {
   }
 };
 
+const dltplaylistsong = async (req, res) => {
+  try {
+    const { playlistid, songid } = req.params;
+    const playlistsong = await playlistmodel.findByIdAndUpdate(playlistid,{ $pull:{songs:songid} });
+    res.json({ message: "playlist song deleted successfully" });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 const updateplaylist = async (req, res) => {
   // const{playlistname}=req.body
 
@@ -109,5 +121,6 @@ module.exports = {
   getplaylists,
   getallplaylists,
   deleteplaylist,
+  dltplaylistsong,
   updateplaylist,
 };
